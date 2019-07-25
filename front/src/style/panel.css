@@ -1,0 +1,12 @@
+.panelDiv {
+    width: 80px;
+    background-color: #353131
+}
+
+.panelDiv > img {
+    cursor: pointer;
+}
+
+.panelDiv > img:hover {
+    background-color: grey;
+}
