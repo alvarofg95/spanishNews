@@ -7,20 +7,20 @@ import MEDIA_LIST from './utils/media';
 const server = express();
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
-/* server.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+server.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Credentials', true);
   next();
-}); */
+});
 
 const parser = new rssParser();
 
-server.get('media-list', (req, res) => {
-  console.log('HEREEE', req);
-  return MEDIA_LIST;
-})
+server.get('/media-list', (req, res) => {
+  // res.mediaList = MEDIA_LIST;
+  return res.send(JSON.stringify(MEDIA_LIST));
+});
 
 server.get('/news/:media', ({ params }, res) => {
   const indexMedia = MEDIA_LIST.findIndex(item => item.name === params.media);
