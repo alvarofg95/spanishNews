@@ -1,12 +1,66 @@
 .panelDiv {
-    width: 80px;
-    background-color: #353131
+  width: 15%;
+  display: inline-flex;
 }
 
-.panelDiv > img {
-    cursor: pointer;
+.mediaPanel > img:hover,
+.activeMedia {
+  background-color: grey;
 }
 
-.panelDiv > img:hover, .activeMedia {
-    background-color: grey;
+.mediaPanel {
+  background-color: #353131;
+  display: inline-grid;
+  width: 40%;
+  align-items: center;
+}
+
+.sectionPanel {
+  background-color: grey;
+  width: 60%;
+  text-align: center;
+}
+
+.mediaPanel > img,
+.sectionPanel > p {
+  cursor: pointer;
+  width: 100%;
+}
+
+.newsListDiv {
+  width: 85%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  overflow-y: auto;
+}
+
+.itemNew {
+  width: 300px;
+  padding: 20px;
+  margin: 5px;
+  text-decoration: none;
+  color: #000000;
+}
+
+.itemNew > img {
+  width: 100%;
+}
+
+.itemNew > .itemTitle {
+  font-weight: bold;
+  margin-top: 0px;
+}
+
+.itemNew > .itemDescription {
+  font-weight: 300;
+  text-align: justify;
+  margin-top: -10px;
+}
+
+.itemDate {
+  text-align: right;
+  font-weight: bold;
+  font-size: 11px;
+  margin-top: -15px;
 }

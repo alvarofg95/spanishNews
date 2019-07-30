@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import Panel from '../components/Panel';
 import postToAPI from '../utils/postToAPI';
-import { GET_MEDIA_LIST } from '../utils/APIQueries';
+import { GET_MEDIA_LIST, GET_MEDIA_NEWS } from '../utils/APIQueries';
+import NewsList from '../components/NewsList';
+
+const height = window.innerHeight;
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mediaList: []
+      mediaList: [],
+      news: []
     };
     this.getMediaList = this.getMediaList.bind(this);
     this.onClickMedia = this.onClickMedia.bind(this);
+    this.onClickSection = this.onClickSection.bind(this);
   }
 
   componentWillMount() {
@@ -35,16 +40,26 @@ class Home extends Component {
     }
   }
 
+  onClickSection(mediaKey, mediaSection) {
+    if (mediaKey && mediaSection) {
+      postToAPI(GET_MEDIA_NEWS, `/${mediaKey}/${mediaSection}`).then(res => {
+        this.setState({ news: res });
+      });
+    }
+  }
+
   render() {
     return (
       <div className="container">
         <Panel
+          height={height}
           mediaList={this.state.mediaList}
           mediaKey={this.state.mediaKey}
           sectionList={this.state.sectionList}
           onClickMedia={this.onClickMedia}
+          onClickSection={this.onClickSection}
         />
-        <div>contenido</div>
+        <NewsList height={height} news={this.state.news} />
       </div>
     );
   }
