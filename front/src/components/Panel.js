@@ -7,33 +7,57 @@ export default ({
   mediaList = [],
   mediaKey,
   sectionList,
+  subSectionList = [],
   sectionKey,
+  subSectionKey,
   onClickMedia,
-  onClickSection
-}) => (
-  <div className="panelDiv" style={{ height }}>
-    <div className="mediaPanel">
-      {mediaList &&
-        mediaList.length &&
-        mediaList.map(media => (
-          <Icon
-            key={media.nameKey}
-            className={media.nameKey === mediaKey ? 'activeMedia' : ''}
-            width="80"
-            src={require('../assets/mediaIcons/logo.svg')}
-            alt={media.name}
-            onClick={() => onClickMedia(media.nameKey)}
-          />
-        ))}
-    </div>
-    {mediaKey ? (
-      <div className="sectionPanel">
-        {sectionList.map(section => (
-          <p key={section.nameKey} onClick={() => onClickSection(mediaKey, section.nameKey)}>
-            {section.name}
-          </p>
-        ))}
+  onClickSection,
+  onClickSubSection
+}) => {
+  console.log({ mediaKey, sectionKey, subSectionKey });
+  const subSectionSelected = subSectionList && subSectionList.length ? true : false;
+  return (
+    <div className={`panelDiv${subSectionSelected ? ' width-30' : ''}`} style={{ height }}>
+      <div className={`mediaPanel${subSectionSelected ? ' width-30' : ''}`}>
+        {mediaList &&
+          mediaList.length &&
+          mediaList.map(media => (
+            <Icon
+              key={media.nameKey}
+              className={media.nameKey === mediaKey ? 'activeMedia' : ''}
+              width="80"
+              src={require('../assets/mediaIcons/logo.svg')}
+              alt={media.name}
+              onClick={() => onClickMedia(media.nameKey)}
+            />
+          ))}
       </div>
-    ) : null}
-  </div>
-);
+      {mediaKey ? (
+        <div className={`sectionPanel${subSectionSelected ? ' width-40' : ''}`}>
+          {sectionList.map(section => (
+            <p
+              key={section.nameKey}
+              className={sectionKey === section.nameKey ? 'activeSection' : ''}
+              onClick={() => onClickSection(mediaKey, section.nameKey)}
+            >
+              {section.name}
+            </p>
+          ))}
+        </div>
+      ) : null}
+      {sectionKey && subSectionList.length ? (
+        <div className={`subSectionPanel${subSectionSelected ? ' width-40' : ''}`}>
+          {subSectionList.map(section => (
+            <p
+              key={section.nameKey}
+              className={subSectionKey === section.nameKey ? 'activeSubSection' : ''}
+              onClick={() => onClickSubSection(mediaKey, sectionKey, section.nameKey)}
+            >
+              {section.name}
+            </p>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+};

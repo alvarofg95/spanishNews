@@ -21,29 +21,53 @@ server.get('/media-list', (req, res) => {
   return res.send(JSON.stringify(MEDIA_LIST));
 });
 
-server.get('/news/:media/:section', ({ params }, res) => {
+server.get('/news/:media/:section/:subsection', ({ params }, res) => {
   const indexMedia = MEDIA_LIST.findIndex(item => item.nameKey === params.media);
   if (indexMedia > -1) {
     const media = MEDIA_LIST[indexMedia];
     const sectionIndex = media && media.sections.findIndex(m => m.nameKey === params.section);
     if (sectionIndex > -1) {
-      parser.parseURL(media.sections[sectionIndex].url).then(feed => {
-        res.send(
-          JSON.stringify(
-            feed.items
-              .filter(item => extractImage(item.content))
-              .map(item => ({
-                title: item.title,
-                image: extractImage(item.content),
-                description: `${item.contentSnippet.substring(0, 120)}...`,
-                creationDate: item.pubDate,
-                isoDate: item.isoDate,
-                formattedDate: item.isoDate ? new Date(item.isoDate) : null,
-                link: item.link
-              }))
-          )
-        );
-      });
+      const subSectionIndex =
+        params.subsection !== 'null'
+          ? media.sections[sectionIndex].sections.findIndex(m => m.nameKey === params.subsection)
+          : -1;
+      if (subSectionIndex === -1) {
+        parser.parseURL(media.sections[sectionIndex].url).then(feed => {
+          res.send(
+            JSON.stringify(
+              feed.items
+                .filter(item => extractImage(item.content))
+                .map(item => ({
+                  title: item.title,
+                  image: extractImage(item.content),
+                  description: `${item.contentSnippet.substring(0, 120)}...`,
+                  creationDate: item.pubDate,
+                  isoDate: item.isoDate,
+                  formattedDate: item.isoDate ? new Date(item.isoDate) : null,
+                  link: item.link
+                }))
+            )
+          );
+        });
+      } else {
+        parser.parseURL(media.sections[sectionIndex].sections[subSectionIndex].url).then(feed => {
+          res.send(
+            JSON.stringify(
+              feed.items
+                .filter(item => extractImage(item.content))
+                .map(item => ({
+                  title: item.title,
+                  image: extractImage(item.content),
+                  description: `${item.contentSnippet.substring(0, 120)}...`,
+                  creationDate: item.pubDate,
+                  isoDate: item.isoDate,
+                  formattedDate: item.isoDate ? new Date(item.isoDate) : null,
+                  link: item.link
+                }))
+            )
+          );
+        });
+      }
     }
   }
   return { title: 'Hello World' };
